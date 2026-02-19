@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
-const socket = io("https://chat-backend-mmfp.onrender.com");
-
+const socket = io("https://chat-backend-mmfp.onrender.com", {
+  transports: ["websocket"],
+});
 
 export default function App() {
   const [message, setMessage] = useState("");
@@ -16,7 +17,6 @@ export default function App() {
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
 
-  // Join Chat
   const joinChat = () => {
     if (!user.trim()) {
       alert("Enter your name");
@@ -25,7 +25,6 @@ export default function App() {
     setJoined(true);
   };
 
-  // Profile Change
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -33,7 +32,6 @@ export default function App() {
     }
   };
 
-  // Select Image
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -41,7 +39,6 @@ export default function App() {
     }
   };
 
-  // Send Message
   const sendMessage = () => {
     if (!message.trim() && !image) return;
 
@@ -60,7 +57,6 @@ export default function App() {
     setImage(null);
   };
 
-  // Receive Message (SAFE VERSION)
   useEffect(() => {
     const receiveHandler = (data) => {
       setMessages((prev) => [...prev, data]);
@@ -73,13 +69,11 @@ export default function App() {
     };
   }, []);
 
-  // -----------------------
-  // BEFORE JOIN SCREEN
-  // -----------------------
+  // ---------------- BEFORE JOIN ----------------
   if (!joined) {
     return (
-      <div className="h-screen bg-[#111B21] flex items-center justify-center text-white">
-        <div className="bg-[#202C33] p-6 rounded-xl w-80 space-y-4">
+      <div className="min-h-screen bg-[#111B21] flex items-center justify-center text-white overflow-hidden">
+        <div className="bg-[#202C33] p-6 rounded-xl w-[90%] max-w-sm space-y-4">
           <h2 className="text-xl font-semibold text-center">
             Setup Profile
           </h2>
@@ -87,7 +81,7 @@ export default function App() {
           <input
             type="text"
             placeholder="Enter Name"
-            className="w-full p-2 rounded bg-[#2A3942]"
+            className="w-full p-2 rounded bg-[#2A3942] outline-none"
             onChange={(e) => setUser(e.target.value)}
           />
 
@@ -102,16 +96,15 @@ export default function App() {
     );
   }
 
-  // -----------------------
-  // CHAT SCREEN
-  // -----------------------
+  // ---------------- CHAT SCREEN ----------------
   return (
-    <div className="h-screen flex items-center justify-center bg-[#111B21] md:bg-[#0B141A]">
-      
-      <div className="bg-[#111B21] flex flex-col overflow-hidden 
-                      w-full h-full 
-                      md:w-[390px] md:h-[700px] 
-                      md:rounded-xl md:shadow-2xl">
+    <div className="min-h-screen bg-[#111B21] flex justify-center overflow-hidden">
+
+      <div
+        className="flex flex-col bg-[#111B21]
+                   w-full max-w-md
+                   h-screen"
+      >
 
         {/* HEADER */}
         <div className="bg-[#202C33] p-4 text-white font-semibold text-lg flex items-center gap-3">
@@ -137,17 +130,19 @@ export default function App() {
         </div>
 
         {/* MESSAGES */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-3">
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((msg, index) => {
             const isOwn = msg.user === user;
 
             return (
               <div
                 key={index}
-                className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  isOwn ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
-                  className={`px-4 py-2 rounded-lg max-w-[70%] text-sm ${
+                  className={`px-4 py-2 rounded-lg max-w-[75%] text-sm break-words ${
                     isOwn
                       ? "bg-[#005C4B] text-white"
                       : "bg-[#202C33] text-white"
@@ -165,7 +160,7 @@ export default function App() {
                     <img
                       src={msg.image}
                       alt="sent-img"
-                      className="mt-2 rounded-lg max-h-48"
+                      className="mt-2 rounded-lg max-h-48 w-full object-cover"
                     />
                   )}
                 </div>
@@ -203,7 +198,7 @@ export default function App() {
           />
 
           <input
-            className="flex-1 bg-[#2A3942] text-white px-3 py-2 rounded-lg outline-none"
+            className="flex-1 bg-[#2A3942] text-white px-3 py-2 rounded-lg outline-none min-w-0"
             placeholder="Type a message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
