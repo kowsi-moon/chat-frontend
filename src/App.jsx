@@ -98,13 +98,10 @@ export default function App() {
 
   // ---------------- CHAT SCREEN ----------------
   return (
-    <div className="min-h-screen bg-[#111B21] flex justify-center overflow-hidden">
+    <div className="fixed inset-0 bg-[#111B21] flex justify-center">
 
-      <div
-        className="flex flex-col bg-[#111B21]
-                   w-full max-w-md
-                   h-screen"
-      >
+    <div className="flex flex-col w-full max-w-md h-full">
+      
 
         {/* HEADER */}
         <div className="bg-[#202C33] p-4 text-white font-semibold text-lg flex items-center gap-3">
@@ -142,7 +139,7 @@ export default function App() {
                 }`}
               >
                 <div
-                  className={`px-4 py-2 rounded-lg max-w-[75%] text-sm break-words ${
+                  className={`px-4 py-2 rounded-lg max-w-[75%] text-sm ${
                     isOwn
                       ? "bg-[#005C4B] text-white"
                       : "bg-[#202C33] text-white"
@@ -181,7 +178,10 @@ export default function App() {
         )}
 
         {/* INPUT AREA */}
-        <div className="bg-[#202C33] p-3 flex gap-2 items-center">
+        <div className="flex-1 bg-[#2A3942] text-white px-3 py-2 rounded-lg outline-none min-w-0"
+>
+        
+
           <button
             onClick={() => imageInputRef.current.click()}
             className="text-white text-xl"
