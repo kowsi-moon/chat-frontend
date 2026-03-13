@@ -14,6 +14,10 @@ function App() {
     socket.on("receive_message", (data) => {
       setMessages((prev) => [...prev, data]);
     });
+
+    return () => {
+      socket.off("receive_message");
+    };
   }, []);
 
   const joinChat = () => {
@@ -31,7 +35,6 @@ function App() {
     };
 
     socket.emit("send_message", msgData);
-    setMessages((prev) => [...prev, msgData]);
     setMessage("");
   };
 
@@ -48,7 +51,6 @@ function App() {
     };
 
     socket.emit("send_message", msgData);
-    setMessages((prev) => [...prev, msgData]);
   };
 
   // 🔥 NAME SCREEN
@@ -120,11 +122,11 @@ function App() {
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`px-3 py-2 rounded-lg text-sm text-white break-words max-w-[20%] ${
-                msg.sender === socket.id
-                  ? "bg-green-600 ml-auto"
-                  : "bg-[#202C33]"
-              }`}
+             className={`px-3 py-2 rounded-lg text-sm text-white break-words max-w-[70%] w-fit ${
+  msg.name === name
+    ? "bg-green-600 ml-auto"
+    : "bg-[#202C33] mr-auto"
+}`}
             >
               <p className="text-xs text-gray-300 mb-1">{msg.name}</p>
 
@@ -146,7 +148,7 @@ function App() {
 
           <label
             htmlFor="imageUpload"
-            className=" text-white px-3 py-2 rounded-full cursor-pointer"
+            className="text-white px-3 py-2 rounded-full cursor-pointer"
           >
             📷
           </label>
