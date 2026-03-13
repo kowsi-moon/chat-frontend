@@ -53,7 +53,7 @@ function App() {
     socket.emit("send_message", msgData);
   };
 
-  // 🔥 NAME SCREEN
+  // NAME SCREEN
   if (!joined) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[#0B141A]">
@@ -79,7 +79,7 @@ function App() {
     );
   }
 
-  // 🔥 CHAT SCREEN
+  //  CHAT SCREEN
   return (
     <div className="fixed inset-0 bg-[#0B141A]">
       <div className="flex flex-col h-full w-full max-w-md mx-auto">
